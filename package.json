@@ -1,0 +1,45 @@
+{
+  "name": "cv-builder",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CV Builder - Technical Test - Fajar Dwi Rianto",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -p ${PORT:-3000}",
+    "lint": "eslint . --ext .ts,.tsx --report-unused-disable-directives",
+    "test": "vitest",
+    "test:ci": "vitest --run --reporter verbose",
+    "typecheck": "tsc -noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fajarpostman/cv-builder.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fajarpostman/cv-builder/issues"
+  },
+  "homepage": "https://github.com/fajarpostman/cv-builder#readme",
+  "dependencies": {
+    "axios": "^1.12.2",
+    "mongoose": "^8.19.1",
+    "next": "^14.2.33",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "^24.7.0",
+    "@types/react": "^19.2.2",
+    "jsdom": "^27.0.0",
+    "mongodb-memory-server": "^10.2.3",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

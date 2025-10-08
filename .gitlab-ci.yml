@@ -1,0 +1,32 @@
+image: node:20
+
+stages:
+  - test
+  - build
+
+cache:
+  paths:
+    - node_modules/
+
+variables:
+  NODE_ENV: test
+
+before_script:
+  - npm ci
+
+test:
+  stage: test
+  script: 
+    - npm run test:ci
+  artifacts:
+    when: always
+    reports:
+      junit: junit.xml
+
+build:
+  stage: build
+  script: 
+    - npm run build
+  artifacts:
+    paths:
+      - .next
