@@ -4,7 +4,7 @@
  * @author Fajar Postman
  */
 
-'use client';
+
 import React, { useState } from 'react';
 import { ZodError } from 'zod';
 import {

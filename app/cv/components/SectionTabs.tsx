@@ -5,7 +5,7 @@
  * 
  */
 
-'use client';
+
 import React from 'react';
 
 type SectionType = 'personal' | 'experience' | 'skills' | 'education' | 'interests';
