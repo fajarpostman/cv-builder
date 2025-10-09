@@ -7,32 +7,33 @@
 
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/cv-builder";
+const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  throw new Error("❌ MONGODB_URI not defined in environment");
+  throw new Error("MONGODB_URI not defined in environment (check Vercel settings)");
 }
 
-let cached = (global as any).mongoose || { conn: null, promise: null };
+let cached = (global as any)._mongoose;
+
+if (!cached) {
+  cached = (global as any)._mongoose = { conn: null, promise: null };
+}
 
 export async function connectToDB() {
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
-    console.log(`🔌 Connecting to MongoDB: ${MONGODB_URI}`);
-
-    cached.promise = mongoose
-      .connect(MONGODB_URI, {
-        dbName: "cv-builder",
-        bufferCommands: false,
-        serverSelectionTimeoutMS: 10000, // 10s
-      })
-      .then((mongoose) => {
-        console.log("✅ MongoDB Connected");
-        return mongoose;
+    console.log("🔌 Connecting to MongoDB...");
+    cached.promise = mongoose.connect(MONGODB_URI as string, {
+      dbName: "cv-builder",
+      bufferCommands: false,
+    })
+      .then((m) => {
+        console.log("MongoDB Connected");
+        return m;
       })
       .catch((err) => {
-        console.error("❌ MongoDB connection error:", err.message);
+        console.error("MongoDB connection error:", err.message);
         throw err;
       });
   }
@@ -41,4 +42,3 @@ export async function connectToDB() {
   return cached.conn;
 }
 
-(global as any).mongoose = cached;
