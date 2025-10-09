@@ -8,6 +8,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p ${PORT:-3000}",
+    "docker:dev": "docker compose up -d --build",
+    "docker:down": "docker compose down",
     "lint": "eslint . --ext .ts,.tsx --report-unused-disable-directives",
     "test": "vitest",
     "test:ci": "vitest --run --reporter verbose",
@@ -26,10 +28,12 @@
   "homepage": "https://github.com/fajarpostman/cv-builder#readme",
   "dependencies": {
     "axios": "^1.12.2",
+    "html2pdf.js": "^0.12.1",
     "mongoose": "^8.19.1",
     "next": "^14.2.33",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-router-dom": "^7.9.4",
     "zod": "^4.1.12"
   },
   "devDependencies": {

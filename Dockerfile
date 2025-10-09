@@ -1,13 +1,26 @@
-FROM node:20-alpine AS builder
+# ---------- BUILD STAGE ----------
+FROM node:22-alpine AS builder
 WORKDIR /app
+
 COPY package*.json ./
-RUN npm ci
+RUN npm install
+
 COPY . .
+
+# Pakai env Docker saat build
+ENV NODE_ENV=production
+ENV MONGODB_URI=mongodb://mongo:27017/cv-builder
+
 RUN npm run build
 
-FROM node:20-alpine AS runner
+# ---------- RUNTIME STAGE ----------
+FROM node:22-alpine AS runner
 WORKDIR /app
+
 ENV NODE_ENV=production
+ENV MONGODB_URI=mongodb://mongo:27017/cv-builder
+
 COPY --from=builder /app ./
+
 EXPOSE 3000
-CMD ["node", ".next/standalone/server.js"]
+CMD ["npm", "start"]

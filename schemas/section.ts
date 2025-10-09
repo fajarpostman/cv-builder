@@ -27,7 +27,7 @@ export const Skill = z.object({
     level: z.enum(['beginer', 'intermediate', 'advance']).optional()
 });
 
-export const Education = z.object({
+export const Education = z.object({ 
     school: z.string(),
     degree: z.string().optional(),
     startDate: z.string().optional(),
@@ -36,9 +36,9 @@ export const Education = z.object({
 
 export const SectionInput = z.discriminatedUnion('type', [
   z.object({ type: z.literal('personal'), data: PersonalInfo }),
-  z.object({ type: z.literal('experience'), data: Experience }),
+  z.object({ type: z.literal('experience'), data: z.array(Experience) }),
   z.object({ type: z.literal('skills'), data: z.array(Skill) }),
-  z.object({ type: z.literal('education'), data: Education }),
+  z.object({ type: z.literal('education'), data: z.array(Education) }),
   z.object({ type: z.literal('interests'), data: z.array(z.string()) })
 ]);
 

@@ -1,20 +1,22 @@
-version: '3.8'
 services:
   mongo:
     image: mongo:6
+    container_name: cv-builder-mongo
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+
   web:
     build: .
-    command: npm run dev
+    container_name: cv-builder-web
     ports:
       - "3000:3000"
     environment:
+      - NODE_ENV=production
       - MONGODB_URI=mongodb://mongo:27017/cv-builder
-      - NODE_ENV=development
     depends_on:
       - mongo
+
 volumes:
-mongo-data:
+  mongo-data:

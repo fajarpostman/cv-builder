@@ -7,36 +7,38 @@
 
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI!;
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/cv-builder";
 
 if (!MONGODB_URI) {
-    throw new Error('MONGODB_URI is not set in environment variables');
+  throw new Error("❌ MONGODB_URI not defined in environment");
 }
 
-type MongooseGlobal = {
-    conn: typeof mongoose | null;
-    promise: Promise<typeof mongoose> | null;
-};
-
-
-declare global {
-    var _mongoose: MongooseGlobal | undefined;
-}
-
-const globalWithMongoose = global as unknown as {
-    _mongoose?: MongooseGlobal;
-}
-
-const cached = globalWithMongoose._mongoose ?? (globalWithMongoose._mongoose = { conn: null, promise: null});
+let cached = (global as any).mongoose || { conn: null, promise: null };
 
 export async function connectToDB() {
-    if (cached.conn) {
-        return cached.conn;
-    }
-    if (!cached.promise) {
-        cached.promise = mongoose.connect(MONGODB_URI).then(m => m);
-    }
+  if (cached.conn) return cached.conn;
 
-    cached.conn = await cached.promise;
-    return cached.conn;
+  if (!cached.promise) {
+    console.log(`🔌 Connecting to MongoDB: ${MONGODB_URI}`);
+
+    cached.promise = mongoose
+      .connect(MONGODB_URI, {
+        dbName: "cv-builder",
+        bufferCommands: false,
+        serverSelectionTimeoutMS: 10000, // 10s
+      })
+      .then((mongoose) => {
+        console.log("✅ MongoDB Connected");
+        return mongoose;
+      })
+      .catch((err) => {
+        console.error("❌ MongoDB connection error:", err.message);
+        throw err;
+      });
+  }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
 }
+
+(global as any).mongoose = cached;

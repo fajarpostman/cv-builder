@@ -5,26 +5,21 @@
  * 
  */
 
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
+import SectionTabs from './components/SectionTabs';
 import SectionForm from './components/SectionForm';
 import CvPreview from './components/CvPreview';
-import { listSection } from './actions';
 
-export default async function CVPage() {
-    const userId = 'user-123';
-    const sections = await listSection(userId);
+export default function CVPage() {
+  const [currentSection, setCurrentSection] = useState<'personal' | 'experience' | 'skills' | 'education' | 'interests'>('personal');
 
-    return (
-        <div style={{ padding: 24}}>
-            <h1>CV Builder</h1>
-            <div style={{ display: 'flex', gap: 24}}>
-                <div style={{ flex: 1 }}>
-                    <SectionForm />
-                </div>
-                <div style={{ flex: 2 }}>
-                    <CvPreview sections={sections} />
-                </div>
-            </div>
-        </div>
-    );
+  return (
+    <div style={{ padding: 20 }}>
+      <h1>CV Builder</h1>
+      <SectionTabs current={currentSection} onChange={setCurrentSection} />
+      <SectionForm currentSection={currentSection} />
+      <CvPreview />
+    </div>
+  );
 }
